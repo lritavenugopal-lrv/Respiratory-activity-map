@@ -1,0 +1,16 @@
+# R Code to Download and Unzip TIGER/Line 2020 County Shapefiles
+
+
+# Set URL and destination
+url <- "https://www2.census.gov/geo/tiger/TIGER2020/COUNTY/tl_2020_us_county.zip"
+destfile <- "tl_2020_us_county.zip"
+outdir <- "tl_2020_us_county"
+
+# Download the ZIP file
+download.file(url, destfile, mode = "wb")
+
+# Unzip contents
+unzip(destfile, exdir = outdir)
+
+# List extracted files
+list.files(outdir)
