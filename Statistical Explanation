@@ -1,51 +1,40 @@
-**What the code is doing (statistical explanation)**
+What the code is doing (statistical explanation)
 
-Load and prepare data
-The code imports weekly respiratory indicator values for six Idaho counties. It removes the most recent week (since data may be incomplete) and calculates a simple regional average.
+1. Load and prepare data
+      The code imports weekly respiratory indicator values for six Idaho counties. 
+      It removes the most recent week (since data may be incomplete) and calculates a simple regional average.
 
-Use historical baselines for each county
-For every county, the script loads a baseline mean and standard deviation (SD).
-These values act as the expected normal activity level based on historical data.
+2. Use historical baselines for each county
+      For every county, the script loads a baseline mean and standard deviation (SD).
+      These values act as the expected normal activity level based on historical data.
 
-Apply Exponentially Weighted Moving Average (EWMA)
-For each county, an EWMA time series is calculated.
+3. Apply Exponentially Weighted Moving Average (EWMA)
+      For each county, an EWMA time series is calculated.
+      EWMA smooths the raw weekly data.
+      It gives more weight to recent weeks while still incorporating past values.
+      This is a common outbreak-detection method because it highlights sustained increases in activity, not just single-week spikes.
+      The smoothing parameter, α = 0.3, determines how quickly the algorithm responds to recent changes.
 
-EWMA smooths the raw weekly data.
+4. Convert EWMA values into statistical “signal” thresholds
+      For each county, the code calculates several thresholds:
+      2 SD, 4 SD, 7 SD, 9 SD, 10 SD above baseline
+      These thresholds represent increasing levels of activity, with higher SDs meaning stronger signals of abnormal disease transmission.
 
-It gives more weight to recent weeks while still incorporating past values.
+5. Assign Activity Levels (1–5) based on deviation from baseline
+       Using the threshold system, each county’s EWMA value is classified into an activity category:
+           1 = within 2 SD → baseline/low activity
+           2 = 3–4 SD above → moderate increase
+           3 = 5–7 SD above → high activity
+           4 = 8–9 SD above → very high activity
+           5 = ≥10 SD above → extremely high / strong outbreak signal
 
-This is a common outbreak-detection method because it highlights sustained increases in activity, not just single-week spikes.
-The smoothing parameter, α = 0.3, determines how quickly the algorithm responds to recent changes.
+      This transforms continuous EWMA signals into an easy-to-interpret categorical alert level.
 
-Convert EWMA values into statistical “signal” thresholds
-For each county, the code calculates several thresholds:
+6. Output the most recent activity classification
+      The script extracts the latest week (after EWMA smoothing) and provides the activity category for each county.
+      It then reshapes these results into long format for visualization or reporting.
 
-2 SD, 4 SD, 7 SD, 9 SD, 10 SD above baseline
-These thresholds represent increasing levels of activity, with higher SDs meaning stronger signals of abnormal disease transmission.
-
-Assign Activity Levels (1–5) based on deviation from baseline
-Using the threshold system, each county’s EWMA value is classified into an activity category:
-
-1 = within 2 SD → baseline/low activity
-
-2 = 3–4 SD above → moderate increase
-
-3 = 5–7 SD above → high activity
-
-4 = 8–9 SD above → very high activity
-
-5 = ≥10 SD above → extremely high / strong outbreak signal
-
-This transforms continuous EWMA signals into an easy-to-interpret categorical alert level.
-
-Output the most recent activity classification
-The script extracts the latest week (after EWMA smoothing) and provides the activity category for each county.
-It then reshapes these results into long format for visualization or reporting.
-
-In short
-
-The code:
-
+In short, the code:
 (1) smooths weekly COVID activity using EWMA,
 (2) compares activity to county-specific historical baselines,
 (3) calculates how many SDs each county is above expected levels, and
