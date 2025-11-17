@@ -18,7 +18,7 @@ Download 'Respiratory activity map' folder into your working R directory
 - Respiratory Syncytial Virus (RSV)  -  CDC Respiratory Syncytial Virus v1
 
 
-### NBS Data   *(Case counts)* for:
+### NEDSS Data   *(Case counts)* for:
 - Pertussis  
 
 ---
