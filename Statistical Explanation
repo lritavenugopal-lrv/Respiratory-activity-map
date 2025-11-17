@@ -1,4 +1,4 @@
-##What the code is doing (statistical explanation)
+**What the code is doing (statistical explanation)**
 
 Load and prepare data
 The code imports weekly respiratory indicator values for six Idaho counties. It removes the most recent week (since data may be incomplete) and calculates a simple regional average.
